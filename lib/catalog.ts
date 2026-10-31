@@ -15,10 +15,11 @@ function search(q: string | undefined) {
   return term ? term : undefined;
 }
 
-export async function listSubscriptions(query: ListQuery) {
+export async function listSubscriptions(query: ListQuery, customerId?: string) {
   const page = parsePage(query.page);
   const term = search(query.q);
   const where: Prisma.SubscriptionWhereInput = {};
+  if (customerId) where.customerId = customerId;
   if (query.status && query.status !== "ALL") where.status = query.status as Prisma.EnumSubscriptionStatusFilter["equals"];
   if (term) {
     where.OR = [

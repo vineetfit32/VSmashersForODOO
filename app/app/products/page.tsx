@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 
-import { DataTable } from "@/components/data-table";
 import { ListControls } from "@/components/list-controls";
 import { ProductTable } from "@/components/catalog-tables";
 import { listProducts } from "@/lib/catalog";
@@ -35,5 +34,3 @@ export default async function ProductsPage({
     </div>
   );
 }
-
-void DataTable;

@@ -56,7 +56,7 @@ export function DevPersonaBanner() {
   }
 
   return (
-    <div className="sticky top-0 z-50 border-b bg-card/95 shadow-sm backdrop-blur">
+    <div className="app-chrome print:hidden sticky top-0 z-50 border-b bg-card/95 shadow-sm backdrop-blur">
       <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-3 gap-y-2 px-4 py-2">
         <div className="flex min-w-0 items-center gap-2 text-sm">
           <span className="rounded-full bg-primary px-2 py-0.5 text-xs font-medium text-primary-foreground">

@@ -16,14 +16,14 @@ export function AppShell({
 }) {
   return (
     <div className="flex min-h-full flex-1 bg-[#f6f7f9] text-foreground">
-      <aside className="app-chrome hidden w-60 shrink-0 flex-col bg-[#714B67] text-white md:flex">
+      <aside className="app-chrome print:hidden hidden w-60 shrink-0 flex-col bg-[#714B67] text-white md:flex">
         <Link href={links[0]?.href ?? "/app"} className="px-4 py-4 text-sm font-semibold tracking-wide">
           Brightloop
         </Link>
         <SidebarNav links={links} variant="sidebar" />
       </aside>
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="app-chrome sticky top-0 z-30 border-b bg-white">
+        <header className="app-chrome print:hidden sticky top-0 z-30 border-b bg-white">
           <div className="flex h-12 items-center gap-3 px-4">
             <p className="text-sm font-semibold text-[#714B67] md:hidden">Brightloop</p>
             <Breadcrumbs />

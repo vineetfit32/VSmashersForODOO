@@ -1,6 +1,5 @@
 import { redirect } from "next/navigation";
 
-import { WorkspaceFrame } from "@/components/workspace-frame";
 import { homeFor } from "@/lib/auth/access";
 import { getSession } from "@/lib/auth/session";
 import { prisma } from "@/lib/prisma";
