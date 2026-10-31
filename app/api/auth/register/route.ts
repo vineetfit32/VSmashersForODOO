@@ -13,6 +13,11 @@ export async function POST(request: Request) {
   }
 
   const { email, password, firstName, lastName, companyName, phone, next } = parsed.data;
+  const existing = await prisma.user.findUnique({ where: { email }, select: { id: true } });
+  if (existing) {
+    return json({ error: "An account with this email already exists." }, 409);
+  }
+
   const passwordHash = await hashPassword(password);
 
   try {
