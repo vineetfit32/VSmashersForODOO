@@ -14,7 +14,7 @@ export function ResetPasswordForm({ token }: { token: string }) {
     return <FormError message="This reset link is missing a token." />;
   }
 
-  async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setPending(true);
     setError(null);

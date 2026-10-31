@@ -30,7 +30,7 @@ export default async function AdminPage() {
         <Stat label="Admins" value={counts.ADMIN ?? 0} />
         <Stat label="Staff" value={counts.STAFF ?? 0} />
         <Stat label="Customers" value={counts.CUSTOMER ?? 0} />
-      </dl>
+      </div>
     </WorkspaceFrame>
   );
 }

@@ -28,14 +28,14 @@ export default async function PortalPage() {
       title={customer.companyName}
       description="This view is limited to your customer record. Other customers' subscriptions and invoices stay hidden."
     >
-      <dl className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-4 sm:grid-cols-2">
         <Info label="Contact" value={customer.contactName} />
         <Info label="Email" value={customer.email} />
         <Info label="Billing address" value={customer.billingAddress ?? "Not provided"} />
         <Info label="Customer id" value={customer.id} />
         <Info label="Subscriptions" value={String(customer._count.subscriptions)} />
         <Info label="Invoices" value={String(customer._count.invoices)} />
-      </dl>
+      </div>
     </WorkspaceFrame>
   );
 }

@@ -34,7 +34,7 @@ export default async function StaffWorkspacePage() {
           <dt className="text-sm text-muted-foreground">Overdue invoices</dt>
           <dd className="mt-1 text-2xl font-semibold">{overdueInvoices}</dd>
         </div>
-      </dl>
+      </div>
     </WorkspaceFrame>
   );
 }
