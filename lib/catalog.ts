@@ -15,11 +15,13 @@ function search(q: string | undefined) {
   return term ? term : undefined;
 }
 
-export async function listSubscriptions(query: ListQuery, customerId?: string) {
+export async function listSubscriptions(query: ListQuery, scope: { organizationId: string; customerId?: string }) {
   const page = parsePage(query.page);
   const term = search(query.q);
-  const where: Prisma.SubscriptionWhereInput = {};
-  if (customerId) where.customerId = customerId;
+  const where: Prisma.SubscriptionWhereInput = {
+    customer: { organizationId: scope.organizationId },
+  };
+  if (scope.customerId) where.customerId = scope.customerId;
   const subscriptionStatuses = ["DRAFT", "QUOTATION", "CONFIRMED", "ACTIVE", "PAUSED", "CLOSED"] as const;
   if (query.status && query.status !== "ALL" && subscriptionStatuses.includes(query.status as (typeof subscriptionStatuses)[number])) {
     where.status = query.status as (typeof subscriptionStatuses)[number];
@@ -54,12 +56,12 @@ export async function listSubscriptions(query: ListQuery, customerId?: string) {
   return { page, pageCount: Math.max(1, Math.ceil(total / PAGE_SIZE)), total, rows };
 }
 
-export async function listInvoices(query: ListQuery, customerId?: string) {
+export async function listInvoices(query: ListQuery, scope: { organizationId: string; customerId?: string }) {
   const page = parsePage(query.page);
   const term = search(query.q);
   const today = businessToday();
-  const filters: Prisma.InvoiceWhereInput[] = [];
-  if (customerId) filters.push({ customerId });
+  const filters: Prisma.InvoiceWhereInput[] = [{ customer: { organizationId: scope.organizationId } }];
+  if (scope.customerId) filters.push({ customerId: scope.customerId });
 
   const invoiceStatuses = ["DRAFT", "CONFIRMED", "PAID", "CANCELLED", "OVERDUE"] as const;
   if (query.status === "OVERDUE") {
@@ -111,18 +113,25 @@ export async function listInvoices(query: ListQuery, customerId?: string) {
   return { page, pageCount: Math.max(1, Math.ceil(total / PAGE_SIZE)), total, rows };
 }
 
-export async function listPayments(query: ListQuery) {
+export async function listPayments(query: ListQuery, organizationId: string) {
   const page = parsePage(query.page);
   const term = search(query.q);
-  const where: Prisma.PaymentWhereInput = term
-    ? {
-        OR: [
-          { paymentNumber: { contains: term, mode: "insensitive" } },
-          { invoice: { invoiceNumber: { contains: term, mode: "insensitive" } } },
-          { invoice: { customer: { companyName: { contains: term, mode: "insensitive" } } } },
-        ],
-      }
-    : {};
+  const where: Prisma.PaymentWhereInput = {
+    AND: [
+      { invoice: { customer: { organizationId } } },
+      ...(term
+        ? [
+            {
+              OR: [
+                { paymentNumber: { contains: term, mode: "insensitive" } },
+                { invoice: { invoiceNumber: { contains: term, mode: "insensitive" } } },
+                { invoice: { customer: { companyName: { contains: term, mode: "insensitive" } } } },
+              ],
+            },
+          ]
+        : []),
+    ],
+  };
 
   const [total, rows] = await Promise.all([
     prisma.payment.count({ where }),
@@ -151,12 +160,20 @@ export async function listPayments(query: ListQuery) {
   return { page, pageCount: Math.max(1, Math.ceil(total / PAGE_SIZE)), total, rows };
 }
 
-export async function listProducts(query: ListQuery) {
+export async function listProducts(query: ListQuery, organizationId: string) {
   const page = parsePage(query.page);
   const term = search(query.q);
-  const where: Prisma.ProductWhereInput = term
-    ? { OR: [{ name: { contains: term, mode: "insensitive" } }, { variants: { some: { sku: { contains: term, mode: "insensitive" } } } }] }
-    : {};
+  const where: Prisma.ProductWhereInput = {
+    organizationId,
+    ...(term
+      ? {
+          OR: [
+            { name: { contains: term, mode: "insensitive" } },
+            { variants: { some: { sku: { contains: term, mode: "insensitive" } } } },
+          ],
+        }
+      : {}),
+  };
   const [total, rows] = await Promise.all([
     prisma.product.count({ where }),
     prisma.product.findMany({
@@ -177,12 +194,15 @@ export async function listProducts(query: ListQuery) {
   return { page, pageCount: Math.max(1, Math.ceil(total / PAGE_SIZE)), total, rows };
 }
 
-export async function listDiscounts(query: ListQuery) {
+export async function listDiscounts(query: ListQuery, organizationId: string) {
   const page = parsePage(query.page);
   const term = search(query.q);
-  const where: Prisma.DiscountRuleWhereInput = term
-    ? { OR: [{ code: { contains: term, mode: "insensitive" } }, { name: { contains: term, mode: "insensitive" } }] }
-    : {};
+  const where: Prisma.DiscountRuleWhereInput = {
+    organizationId,
+    ...(term
+      ? { OR: [{ code: { contains: term, mode: "insensitive" } }, { name: { contains: term, mode: "insensitive" } }] }
+      : {}),
+  };
   const [total, rows] = await Promise.all([
     prisma.discountRule.count({ where }),
     prisma.discountRule.findMany({

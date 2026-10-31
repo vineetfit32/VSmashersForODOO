@@ -35,6 +35,7 @@ type GenerateInput = {
   limit?: number;
   actorId?: string | null;
   subscriptionIds?: string[];
+  organizationId: string;
   /** Invoice the next period even when next_billing_date is still in the future. */
   force?: boolean;
 };
@@ -70,7 +71,7 @@ export function computeNextInterval(start: Date, interval: BillingInterval, inte
 export async function generateRecurringInvoices(input: GenerateInput = {}): Promise<BillingRunResult> {
   const asOf = utcDateOnly(input.asOf ?? businessToday());
   const limit = input.limit ?? 100;
-  const ids = await findDueSubscriptionIds(asOf, limit, input.subscriptionIds, Boolean(input.force));
+  const ids = await findDueSubscriptionIds(asOf, limit, input.subscriptionIds, Boolean(input.force), input.organizationId);
   const result: BillingRunResult = {
     scanned: ids.length,
     created: [],
@@ -88,7 +89,13 @@ export async function generateRecurringInvoices(input: GenerateInput = {}): Prom
   return result;
 }
 
-async function findDueSubscriptionIds(asOf: Date, limit: number, only?: string[], force = false) {
+async function findDueSubscriptionIds(
+  asOf: Date,
+  limit: number,
+  only: string[] | undefined,
+  force: boolean,
+  organizationId: string,
+) {
   const asOfIso = isoDate(asOf);
   if (only && only.length === 0) return [];
 
@@ -104,6 +111,7 @@ async function findDueSubscriptionIds(asOf: Date, limit: number, only?: string[]
     SELECT id
     FROM subscriptions
     WHERE status = 'ACTIVE'
+      AND customer_id IN (SELECT id FROM customers WHERE organization_id = CAST(${organizationId} AS uuid))
       ${dueFilter}
       AND (expiry_date IS NULL OR expiry_date >= CAST(${asOfIso} AS date))
       ${idFilter}

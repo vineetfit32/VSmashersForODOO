@@ -12,8 +12,8 @@ export async function GET(_request: Request, context: { params: Promise<{ id: st
   }
 
   const { id } = await context.params;
-  const invoice = await prisma.invoice.findUnique({
-    where: { id },
+  const invoice = await prisma.invoice.findFirst({
+    where: { id, customer: { organizationId: session.organizationId } },
     include: { customer: true, lines: true },
   });
   if (!invoice) return new Response("Not found", { status: 404 });

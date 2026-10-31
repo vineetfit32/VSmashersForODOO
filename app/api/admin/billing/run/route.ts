@@ -12,7 +12,10 @@ export async function POST() {
   }
 
   try {
-    const result = await generateRecurringInvoices({ actorId: session.id });
+    const result = await generateRecurringInvoices({
+      actorId: session.id,
+      organizationId: session.organizationId,
+    });
     return json(result);
   } catch (error) {
     if (error instanceof DomainError) return json({ error: error.message }, error.status);

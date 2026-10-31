@@ -13,7 +13,7 @@ export type FinanceSummary = {
   mrrByInterval: Array<{ interval: string; total: number }>;
 };
 
-export async function getFinanceSummary(): Promise<FinanceSummary> {
+export async function getFinanceSummary(organizationId: string): Promise<FinanceSummary> {
   const today = isoDate(businessToday());
   const monthStart = `${today.slice(0, 7)}-01`;
 
@@ -28,12 +28,13 @@ export async function getFinanceSummary(): Promise<FinanceSummary> {
     }>
   >`
     SELECT
-      (SELECT COUNT(*)::int FROM subscriptions WHERE status = 'ACTIVE') AS active_subscriptions,
+      (SELECT COUNT(*)::int FROM subscriptions s JOIN customers c ON c.id = s.customer_id WHERE s.status = 'ACTIVE' AND c.organization_id = CAST(${organizationId} AS uuid)) AS active_subscriptions,
       (
         SELECT COALESCE(SUM(amount), 0)::float
         FROM payments
         WHERE payment_date >= CAST(${monthStart} AS date)
           AND payment_date <= CAST(${today} AS date)
+          AND invoice_id IN (SELECT i.id FROM invoices i JOIN customers c ON c.id = i.customer_id WHERE c.organization_id = CAST(${organizationId} AS uuid))
       ) AS monthly_cash,
       (
         SELECT COALESCE(SUM(balance_due), 0)::float
@@ -41,6 +42,7 @@ export async function getFinanceSummary(): Promise<FinanceSummary> {
         WHERE balance_due > 0
           AND status = 'CONFIRMED'
           AND due_date >= CAST(${today} AS date)
+          AND customer_id IN (SELECT id FROM customers WHERE organization_id = CAST(${organizationId} AS uuid))
       ) AS accounts_receivable,
       (
         SELECT COALESCE(SUM(balance_due), 0)::float
@@ -48,6 +50,7 @@ export async function getFinanceSummary(): Promise<FinanceSummary> {
         WHERE balance_due > 0
           AND status IN ('CONFIRMED', 'OVERDUE')
           AND due_date < CAST(${today} AS date)
+          AND customer_id IN (SELECT id FROM customers WHERE organization_id = CAST(${organizationId} AS uuid))
       ) AS overdue_amount,
       (
         SELECT COUNT(*)::int
@@ -55,6 +58,7 @@ export async function getFinanceSummary(): Promise<FinanceSummary> {
         WHERE balance_due > 0
           AND status IN ('CONFIRMED', 'OVERDUE')
           AND due_date < CAST(${today} AS date)
+          AND customer_id IN (SELECT id FROM customers WHERE organization_id = CAST(${organizationId} AS uuid))
       ) AS overdue_count,
       (
         SELECT COALESCE(SUM(
@@ -69,6 +73,7 @@ export async function getFinanceSummary(): Promise<FinanceSummary> {
         FROM subscriptions s
         JOIN subscription_plans p ON p.id = s.plan_id
         WHERE s.status = 'ACTIVE'
+          AND s.customer_id IN (SELECT id FROM customers WHERE organization_id = CAST(${organizationId} AS uuid))
       ) AS mrr
   `;
 
@@ -77,6 +82,7 @@ export async function getFinanceSummary(): Promise<FinanceSummary> {
            COALESCE(SUM(amount), 0)::float AS total
     FROM payments
     WHERE payment_date >= (CAST(${today} AS date) - INTERVAL '5 months')
+      AND invoice_id IN (SELECT i.id FROM invoices i JOIN customers c ON c.id = i.customer_id WHERE c.organization_id = CAST(${organizationId} AS uuid))
     GROUP BY date_trunc('month', payment_date)
     ORDER BY date_trunc('month', payment_date)
   `;
@@ -95,6 +101,7 @@ export async function getFinanceSummary(): Promise<FinanceSummary> {
     FROM subscriptions s
     JOIN subscription_plans p ON p.id = s.plan_id
     WHERE s.status = 'ACTIVE'
+      AND s.customer_id IN (SELECT id FROM customers WHERE organization_id = CAST(${organizationId} AS uuid))
     GROUP BY p.interval
     ORDER BY p.interval
   `;

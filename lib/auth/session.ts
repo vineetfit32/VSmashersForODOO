@@ -9,6 +9,7 @@ type AuthRecord = {
   id: string;
   email: string;
   role: UserRole;
+  organizationId: string;
   firstName: string;
   lastName: string;
   customer: { id: string } | null;
@@ -30,6 +31,7 @@ export function toPublicUser(user: AuthRecord): PublicUser {
     id: user.id,
     email: user.email,
     role: user.role,
+    organizationId: user.organizationId,
     customerId: user.customer?.id ?? null,
     firstName: user.firstName,
     lastName: user.lastName,
@@ -52,6 +54,7 @@ export async function getSession(): Promise<PublicUser | null> {
       firstName: true,
       lastName: true,
       role: true,
+      organizationId: true,
       isActive: true,
       customer: { select: { id: true } },
     },
@@ -63,6 +66,7 @@ export async function getSession(): Promise<PublicUser | null> {
     id: user.id,
     email: user.email,
     role: user.role,
+    organizationId: user.organizationId,
     firstName: user.firstName,
     lastName: user.lastName,
     customer: user.customer,

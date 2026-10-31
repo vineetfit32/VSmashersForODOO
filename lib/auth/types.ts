@@ -6,6 +6,7 @@ export type PublicUser = {
   id: string;
   email: string;
   role: UserRole;
+  organizationId: string;
   customerId: string | null;
   firstName: string;
   lastName: string;

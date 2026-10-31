@@ -9,6 +9,7 @@ export const authUserSelect = {
   firstName: true,
   lastName: true,
   role: true,
+  organizationId: true,
   isActive: true,
   resetToken: true,
   customer: { select: { id: true } },

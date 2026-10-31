@@ -32,6 +32,7 @@ export async function POST(request: Request) {
     id: user.id,
     email: user.email,
     role: user.role,
+    organizationId: user.organizationId,
     firstName: user.firstName,
     lastName: user.lastName,
     customer: user.customer,

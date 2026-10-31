@@ -2,6 +2,7 @@ import { FinanceChartsLoader } from "@/components/finance-charts-loader";
 import { MetricCard } from "@/components/metric-card";
 import { PageHeader } from "@/components/page-header";
 import { formatInr } from "@/lib/format";
+import { getSession } from "@/lib/auth/session";
 import { getFinanceSummary } from "@/services/finance";
 
 export const dynamic = "force-dynamic";

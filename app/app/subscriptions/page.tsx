@@ -4,6 +4,7 @@ import { ListControls } from "@/components/list-controls";
 import { PageHeader } from "@/components/page-header";
 import { SubscriptionTable } from "@/components/record-tables";
 import { listSubscriptions } from "@/lib/catalog";
+import { getSession } from "@/lib/auth/session";
 
 export const dynamic = "force-dynamic";
 

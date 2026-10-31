@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { getSession } from "@/lib/auth/session";
+import { prisma } from "@/lib/prisma";
 import { generateRecurringInvoices } from "@/services/billing-engine";
 import { DomainError } from "@/services/errors";
 import { confirmInvoice as confirmInvoiceRecord, recordPayment } from "@/services/payment-service";
@@ -24,8 +25,23 @@ function failure(error: unknown) {
   throw error;
 }
 
+async function inWorkspace(session: { organizationId: string }, kind: "subscription" | "invoice", id: string) {
+  const found =
+    kind === "subscription"
+      ? await prisma.subscription.findFirst({
+          where: { id, customer: { organizationId: session.organizationId } },
+          select: { id: true },
+        })
+      : await prisma.invoice.findFirst({
+          where: { id, customer: { organizationId: session.organizationId } },
+          select: { id: true },
+        });
+  return Boolean(found);
+}
+
 async function moveSubscription(id: string, to: SubscriptionStatus) {
   const session = await guard();
+  if (!(await inWorkspace(session, "subscription", id))) return { error: "Subscription not found." };
   try {
     await transitionSubscription({ subscriptionId: id, to, actorId: session.id });
   } catch (error) {
@@ -63,8 +79,10 @@ export async function closeSubscription(id: string) {
 export async function createSubscriptionInvoice(id: string) {
   const session = await guard();
   try {
+    if (!(await inWorkspace(session, "subscription", id))) return { error: "Subscription not found." };
     const result = await generateRecurringInvoices({
       subscriptionIds: [id],
+      organizationId: session.organizationId,
       actorId: session.id,
       force: true,
     });
@@ -80,6 +98,7 @@ export async function createSubscriptionInvoice(id: string) {
 
 export async function confirmInvoice(id: string) {
   const session = await guard();
+  if (!(await inWorkspace(session, "invoice", id))) return { error: "Invoice not found." };
   try {
     await confirmInvoiceRecord(id, session.id);
   } catch (error) {
@@ -99,6 +118,7 @@ export async function registerInvoicePayment(id: string, formData: FormData) {
   if (!Object.values(PaymentMethod).includes(method as PaymentMethod)) {
     return { error: "Choose a payment method." };
   }
+  if (!(await inWorkspace(session, "invoice", id))) return { error: "Invoice not found." };
 
   try {
     await recordPayment({
