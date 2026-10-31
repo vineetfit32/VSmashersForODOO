@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 
+import { BillingRunButton } from "@/components/billing-run-button";
 import { WorkspaceFrame } from "@/components/workspace-frame";
 import { homeFor } from "@/lib/auth/access";
 import { getSession } from "@/lib/auth/session";
@@ -31,6 +32,7 @@ export default async function AdminPage() {
         <Stat label="Staff" value={counts.STAFF ?? 0} />
         <Stat label="Customers" value={counts.CUSTOMER ?? 0} />
       </div>
+      <BillingRunButton />
     </WorkspaceFrame>
   );
 }
