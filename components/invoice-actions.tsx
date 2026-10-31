@@ -31,7 +31,7 @@ export function InvoiceActions({
     setError(null);
     start(async () => {
       const result = await confirmInvoice(id);
-      if (result?.error) setError(result.error);
+      if (result && "error" in result && result.error) setError(result.error);
     });
   }
 
@@ -39,7 +39,7 @@ export function InvoiceActions({
     setError(null);
     start(async () => {
       const result = await registerInvoicePayment(id, formData);
-      if (result?.error) setError(result.error);
+      if (result && "error" in result && result.error) setError(result.error);
       else setPaying(false);
     });
   }

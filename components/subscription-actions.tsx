@@ -17,11 +17,11 @@ export function SubscriptionActions({ id, status }: { id: string; status: string
   const [pending, start] = useTransition();
   const [error, setError] = useState<string | null>(null);
 
-  function run(action: (id: string) => Promise<{ error?: string } | void>) {
+  function run(action: (id: string) => Promise<{ error?: string; ok?: boolean } | void>) {
     setError(null);
     start(async () => {
       const result = await action(id);
-      if (result && "error" in result && result.error) setError(result.error);
+      if (result?.error) setError(result.error);
     });
   }
 

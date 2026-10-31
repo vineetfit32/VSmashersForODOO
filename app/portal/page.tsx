@@ -22,20 +22,20 @@ export default async function PortalPage() {
   if (!customer) redirect("/login");
 
   return (
-    <WorkspaceFrame
-      eyebrow="Customer portal"
-      title={customer.companyName}
-      description="This view is limited to your customer record. Other customers' subscriptions and invoices stay hidden."
-    >
-      <div className="grid gap-4 sm:grid-cols-2">
+    <div className="mx-auto flex max-w-4xl flex-col gap-4">
+      <header>
+        <p className="text-sm text-muted-foreground">Your company</p>
+        <h1 className="text-2xl font-semibold">{customer.companyName}</h1>
+        <p className="text-sm text-muted-foreground">Invoices and subscriptions for this account only.</p>
+      </header>
+      <div className="grid gap-3 sm:grid-cols-2">
         <Info label="Contact" value={customer.contactName} />
         <Info label="Email" value={customer.email} />
         <Info label="Billing address" value={customer.billingAddress ?? "Not provided"} />
-        <Info label="Customer id" value={customer.id} />
         <Info label="Subscriptions" value={String(customer._count.subscriptions)} />
         <Info label="Invoices" value={String(customer._count.invoices)} />
       </div>
-    </WorkspaceFrame>
+    </div>
   );
 }
 

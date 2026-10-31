@@ -38,7 +38,7 @@ export async function GET(_request: Request, context: { params: Promise<{ id: st
     balanceDue: Number(invoice.balanceDue).toFixed(2),
   });
 
-  return new Response(Buffer.from(pdf), {
+  return new Response(new Blob([pdf.buffer.slice(pdf.byteOffset, pdf.byteOffset + pdf.byteLength) as ArrayBuffer]), {
     headers: {
       "Content-Type": "application/pdf",
       "Content-Disposition": `inline; filename="${invoice.invoiceNumber}.pdf"`,
