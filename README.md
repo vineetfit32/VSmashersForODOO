@@ -1,36 +1,52 @@
 # Subscription Management System
 
-A platform to manage products, plans, subscriptions, invoices, payments and revenue reports for subscription-based businesses.
+A platform to manage products, plans, subscriptions, invoices, payments, and revenue for subscription-based businesses.
 
-Built for the **Odoo Hackathon**.
+Built for the **Odoo Hackathon**. Brightloop Software sells software on subscription. This system replaces the spreadsheets, hand-typed invoices, and quarterly revenue reports with one billing workspace.
 
-## About
+## Stack
 
-Brightloop Software sells software on subscription (monthly or yearly), but today everything is manual: spreadsheets for subscriptions, hand-typed invoices and quarterly revenue reports. This project aims to automate the whole subscription lifecycle in one system.
+- Next.js 15 (App Router) and React 19
+- TypeScript, Tailwind CSS, shadcn/ui
+- PostgreSQL 16 and Prisma ORM
 
-## Planned Features
+## Getting started
 
-- User signup, login and password reset
-- Roles: Admin, Internal Staff, Customer
-- Products with variants, and recurring plans
-- Quotation templates and subscriptions
-- Automatic invoice generation, taxes and discounts
-- Payment recording and overdue tracking
-- Reporting dashboard
-- Customer portal
+1. Start PostgreSQL:
 
-## Tech Stack
+```bash
+docker compose up -d
+```
 
-To be decided.
+2. Copy the environment file if you do not already have one:
 
-## Getting Started
+```bash
+copy .env.example .env
+```
 
-Setup instructions will be added once the project is created.
+3. Install dependencies, apply the migration, and seed:
 
-## Team
+```bash
+npm install
+npx prisma migrate dev
+npx prisma db seed
+```
 
-- Add team members here
+The seed loads an admin, two staff users, five customers, the product catalog (including the Odoo Brand variant at +560), daily through yearly plans, GST and VAT, both discount rules, 25 subscriptions, and 35 invoices with payments.
+
+| Role | Email | Password |
+|---|---|---|
+| Admin | admin@brightloop.com | Admin#Pass123 |
+| Staff | staff1@brightloop.com | Staff#Pass123 |
+| Staff | staff2@brightloop.com | Staff#Pass123 |
+| Customer | the five seeded company emails | Customer#Pass123 |
+
+4. Start the app:
+
+```bash
+npm run dev
+```
 
 ## Status
 
-In planning. The project has not been created yet.
+Database schema and seed data are in place. Authentication, billing services, and the workspace UI come next.
