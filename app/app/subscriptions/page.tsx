@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 
 import { ListControls } from "@/components/list-controls";
+import { PageHeader } from "@/components/page-header";
 import { SubscriptionTable } from "@/components/record-tables";
 import { listSubscriptions } from "@/lib/catalog";
 
@@ -37,7 +38,7 @@ export default async function SubscriptionsPage({
 
   return (
     <div className="mx-auto flex max-w-6xl flex-col gap-4">
-      <h1 className="text-2xl font-semibold">Subscriptions</h1>
+      <PageHeader title="Subscriptions" description="Search by number, customer, or plan. Filters use the saved status." />
       <Suspense>
         <ListControls search={query.q ?? ""} filters={FILTERS} active={query.status ?? "ALL"} />
         <SubscriptionTable rows={rows} page={result.page} pageCount={result.pageCount} total={result.total} />

@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 
 import { ListControls } from "@/components/list-controls";
+import { PageHeader } from "@/components/page-header";
 import { PaymentTable } from "@/components/record-tables";
 import { listPayments } from "@/lib/catalog";
 
@@ -28,7 +29,7 @@ export default async function PaymentsPage({
 
   return (
     <div className="mx-auto flex max-w-6xl flex-col gap-4">
-      <h1 className="text-2xl font-semibold">Payments</h1>
+      <PageHeader title="Payments" description="Each row is a payment already recorded against an invoice." />
       <Suspense>
         <ListControls search={query.q ?? ""} filters={[{ id: "ALL", label: "All payments" }]} active="ALL" />
         <PaymentTable rows={rows} page={result.page} pageCount={result.pageCount} total={result.total} />

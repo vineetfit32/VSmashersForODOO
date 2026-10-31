@@ -1,5 +1,5 @@
-import Link from "next/link";
-
+import { MetricCard } from "@/components/metric-card";
+import { PageHeader } from "@/components/page-header";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
@@ -14,24 +14,17 @@ export default async function WorkspaceHome() {
   ]);
 
   return (
-    <div className="mx-auto flex max-w-6xl flex-col gap-4">
-      <header>
-        <h1 className="text-2xl font-semibold">Workspace</h1>
-        <p className="text-sm text-muted-foreground">Subscriptions, invoices, and collections for Brightloop.</p>
-      </header>
+    <div className="mx-auto flex max-w-6xl flex-col gap-5">
+      <PageHeader title="Workspace" description="Live counts from subscriptions and invoices. Open a card to filter the list." />
       <div className="grid gap-3 sm:grid-cols-3">
-        <Link href="/app/subscriptions?status=ACTIVE" className="rounded-lg border bg-white p-4">
-          <p className="text-sm text-muted-foreground">Active subscriptions</p>
-          <p className="mt-1 text-2xl font-semibold">{activeSubscriptions}</p>
-        </Link>
-        <Link href="/app/subscriptions?status=QUOTATION" className="rounded-lg border bg-white p-4">
-          <p className="text-sm text-muted-foreground">Open quotations</p>
-          <p className="mt-1 text-2xl font-semibold">{openQuotes}</p>
-        </Link>
-        <Link href="/app/invoices?status=OVERDUE" className="rounded-lg border bg-white p-4">
-          <p className="text-sm text-muted-foreground">Overdue invoices</p>
-          <p className="mt-1 text-2xl font-semibold">{overdueInvoices}</p>
-        </Link>
+        <MetricCard label="Active subscriptions" value={String(activeSubscriptions)} href="/app/subscriptions?status=ACTIVE" />
+        <MetricCard label="Open quotations" value={String(openQuotes)} href="/app/subscriptions?status=QUOTATION" />
+        <MetricCard
+          label="Overdue invoices"
+          value={String(overdueInvoices)}
+          href="/app/invoices?status=OVERDUE"
+          tone={overdueInvoices > 0 ? "warning" : "default"}
+        />
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import { PageHeader } from "@/components/page-header";
 import { StatusBadge } from "@/components/status-badge";
 import { homeFor } from "@/lib/auth/access";
 import { formatDate, formatInr } from "@/lib/format";
@@ -22,10 +23,7 @@ export default async function PortalSubscriptionsPage() {
 
   return (
     <div className="mx-auto flex max-w-6xl flex-col gap-4">
-      <header>
-        <h1 className="text-2xl font-semibold">Your subscriptions</h1>
-        <p className="text-sm text-muted-foreground">Contracts billed to your company.</p>
-      </header>
+      <PageHeader title="Your subscriptions" description="Contracts billed to your company." />
       <div className="overflow-x-auto rounded-lg border bg-white">
         <table className="w-full min-w-[640px] text-sm">
           <thead className="bg-[#f8f9fa] text-left text-xs text-muted-foreground uppercase">

@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 
 import { ListControls } from "@/components/list-controls";
+import { PageHeader } from "@/components/page-header";
 import { ProductTable } from "@/components/catalog-tables";
 import { listProducts } from "@/lib/catalog";
 
@@ -26,7 +27,7 @@ export default async function ProductsPage({
 
   return (
     <div className="mx-auto flex max-w-6xl flex-col gap-4">
-      <h1 className="text-2xl font-semibold">Products</h1>
+      <PageHeader title="Products" description="Catalog prices and variants, including the Odoo Brand extra." />
       <Suspense>
         <ListControls search={query.q ?? ""} filters={[{ id: "ALL", label: "All products" }]} active="ALL" />
         <ProductTable rows={rows} page={result.page} pageCount={result.pageCount} total={result.total} />

@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { redirect } from "next/navigation";
 
+import { PageHeader } from "@/components/page-header";
 import { InvoiceTable } from "@/components/record-tables";
 import { ListControls } from "@/components/list-controls";
 import { homeFor } from "@/lib/auth/access";
@@ -42,10 +43,7 @@ export default async function PortalInvoicesPage({
 
   return (
     <div className="mx-auto flex max-w-6xl flex-col gap-4">
-      <header>
-        <h1 className="text-2xl font-semibold">Your invoices</h1>
-        <p className="text-sm text-muted-foreground">Only invoices billed to your company are listed here.</p>
-      </header>
+      <PageHeader title="Your invoices" description="Only invoices billed to your company are listed here." />
       <Suspense>
         <ListControls search={query.q ?? ""} filters={FILTERS} active={query.status ?? "ALL"} />
         <InvoiceTable rows={rows} page={result.page} pageCount={result.pageCount} total={result.total} />

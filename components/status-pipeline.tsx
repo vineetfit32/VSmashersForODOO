@@ -19,7 +19,7 @@ export function StatusPipeline({ stages, current }: { stages: string[]; current:
   const currentIndex = Math.max(0, stages.indexOf(current));
 
   return (
-    <ol className="flex min-w-0 flex-1 overflow-x-auto" aria-label="Status">
+    <ol className="flex min-w-0 flex-1 overflow-x-auto py-0.5" aria-label="Status">
       {stages.map((stage, index) => {
         const state = index < currentIndex ? "done" : index === currentIndex ? "current" : "upcoming";
         return (
@@ -30,7 +30,8 @@ export function StatusPipeline({ stages, current }: { stages: string[]; current:
               "relative px-5 py-2 text-center text-xs font-medium tracking-wide uppercase",
               index === 0 ? "rounded-l-md" : "-ml-2 pl-7",
               index === stages.length - 1 && "rounded-r-md",
-              state === "current" && "bg-[#714B67] text-white",
+              "transition-colors duration-200",
+              state === "current" && "bg-[#5c3d56] text-white",
               state === "done" && "bg-[#d9ead3] text-[#27500a]",
               state === "upcoming" && "bg-[#eceff1] text-[#5f6368]",
             )}

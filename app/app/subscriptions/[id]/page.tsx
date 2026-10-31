@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { Chatter } from "@/components/chatter";
+import { PageHeader } from "@/components/page-header";
 import { StatusPipeline, subscriptionStages } from "@/components/status-pipeline";
 import { SubscriptionActions } from "@/components/subscription-actions";
 import { loadChatter } from "@/lib/chatter";
@@ -26,7 +27,8 @@ export default async function SubscriptionFormPage({ params }: { params: Promise
 
   return (
     <div className="mx-auto flex max-w-6xl flex-col gap-4">
-      <div className="rounded-lg border bg-white">
+      <PageHeader title={subscription.subscriptionNumber} description={subscription.customer.companyName} />
+      <div className="rounded-xl border border-[#e6e1ea] bg-white shadow-sm">
         <div className="flex flex-col gap-3 border-b px-4 py-3 lg:flex-row lg:items-center">
           <StatusPipeline stages={subscriptionStages(subscription.status)} current={subscription.status} />
           <SubscriptionActions id={subscription.id} status={subscription.status} />

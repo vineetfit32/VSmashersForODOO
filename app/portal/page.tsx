@@ -1,5 +1,7 @@
 import { redirect } from "next/navigation";
 
+import { MetricCard } from "@/components/metric-card";
+import { PageHeader } from "@/components/page-header";
 import { homeFor } from "@/lib/auth/access";
 import { getSession } from "@/lib/auth/session";
 import { prisma } from "@/lib/prisma";
@@ -23,17 +25,13 @@ export default async function PortalPage() {
 
   return (
     <div className="mx-auto flex max-w-4xl flex-col gap-4">
-      <header>
-        <p className="text-sm text-muted-foreground">Your company</p>
-        <h1 className="text-2xl font-semibold">{customer.companyName}</h1>
-        <p className="text-sm text-muted-foreground">Invoices and subscriptions for this account only.</p>
-      </header>
+      <PageHeader title={customer.companyName} description="Invoices and subscriptions for this account only." />
       <div className="grid gap-3 sm:grid-cols-2">
+        <MetricCard label="Subscriptions" value={String(customer._count.subscriptions)} href="/portal/subscriptions" />
+        <MetricCard label="Invoices" value={String(customer._count.invoices)} href="/portal/invoices" />
         <Info label="Contact" value={customer.contactName} />
         <Info label="Email" value={customer.email} />
         <Info label="Billing address" value={customer.billingAddress ?? "Not provided"} />
-        <Info label="Subscriptions" value={String(customer._count.subscriptions)} />
-        <Info label="Invoices" value={String(customer._count.invoices)} />
       </div>
     </div>
   );

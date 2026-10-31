@@ -2,6 +2,7 @@ import { Suspense } from "react";
 
 import { InvoiceTable } from "@/components/record-tables";
 import { ListControls } from "@/components/list-controls";
+import { PageHeader } from "@/components/page-header";
 import { listInvoices } from "@/lib/catalog";
 
 export const dynamic = "force-dynamic";
@@ -39,7 +40,7 @@ export default async function InvoicesPage({
 
   return (
     <div className="mx-auto flex max-w-6xl flex-col gap-4">
-      <h1 className="text-2xl font-semibold">Invoices</h1>
+      <PageHeader title="Invoices" description="Overdue includes confirmed invoices past their due date with a balance still open." />
       <Suspense>
         <ListControls search={query.q ?? ""} filters={FILTERS} active={query.status ?? "ALL"} />
         <InvoiceTable rows={rows} page={result.page} pageCount={result.pageCount} total={result.total} />

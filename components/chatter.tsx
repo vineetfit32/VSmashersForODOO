@@ -10,7 +10,7 @@ export type ChatterEntry = {
 
 export function Chatter({ entries }: { entries: ChatterEntry[] }) {
   return (
-    <section className="rounded-lg border bg-white">
+    <section className="rounded-xl border border-[#e6e1ea] bg-white shadow-sm">
       <header className="border-b px-4 py-3">
         <h2 className="text-sm font-semibold">Chatter</h2>
       </header>

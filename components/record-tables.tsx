@@ -57,7 +57,7 @@ export function SubscriptionTable({
       accessorKey: "subscriptionNumber",
       header: "Number",
       cell: ({ row }) => (
-        <Link className="font-medium text-[#714B67]" href={`/app/subscriptions/${row.original.id}`}>
+        <Link className="font-medium text-[#5c3d56] underline-offset-2 hover:underline" href={`/app/subscriptions/${row.original.id}`}>
           {row.original.subscriptionNumber}
         </Link>
       ),
@@ -87,7 +87,7 @@ export function InvoiceTable({
       accessorKey: "invoiceNumber",
       header: "Number",
       cell: ({ row }) => (
-        <Link className="font-medium text-[#714B67]" href={row.original.href}>
+        <Link className="font-medium text-[#5c3d56] underline-offset-2 hover:underline" href={row.original.href}>
           {row.original.invoiceNumber}
         </Link>
       ),
@@ -119,7 +119,7 @@ export function PaymentTable({
       accessorKey: "invoiceNumber",
       header: "Invoice",
       cell: ({ row }) => (
-        <Link className="font-medium text-[#714B67]" href={`/app/invoices/${row.original.invoiceId}`}>
+        <Link className="font-medium text-[#5c3d56] underline-offset-2 hover:underline" href={`/app/invoices/${row.original.invoiceId}`}>
           {row.original.invoiceNumber}
         </Link>
       ),

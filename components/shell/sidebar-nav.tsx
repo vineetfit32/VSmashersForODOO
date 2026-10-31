@@ -14,8 +14,8 @@ export function SidebarNav({ links, variant }: { links: ShellLink[]; variant: "s
       aria-label="Workspace"
       className={
         variant === "sidebar"
-          ? "flex flex-1 flex-col gap-1 px-2 pb-4"
-          : "flex gap-1 overflow-x-auto border-t px-2 py-2 md:hidden"
+          ? "flex flex-1 flex-col gap-0.5 px-2 py-3"
+          : "flex gap-1 overflow-x-auto border-t border-[#e6e1ea] bg-white px-2 py-2 md:hidden"
       }
     >
       {links.map((link) => {
@@ -29,14 +29,14 @@ export function SidebarNav({ links, variant }: { links: ShellLink[]; variant: "s
             href={link.href}
             aria-current={active ? "page" : undefined}
             className={cn(
-              "rounded-md px-3 py-2 text-sm whitespace-nowrap",
+              "rounded-md px-3 py-2 text-sm whitespace-nowrap transition-colors duration-150",
               variant === "sidebar"
                 ? active
-                  ? "bg-white/15 font-medium text-white"
-                  : "text-white/80 hover:bg-white/10 hover:text-white"
+                  ? "bg-white font-medium text-[#5c3d56]"
+                  : "text-white/85 hover:bg-white/10 hover:text-white"
                 : active
-                  ? "bg-[#714B67] font-medium text-white"
-                  : "bg-white text-foreground",
+                  ? "bg-[#5c3d56] font-medium text-white"
+                  : "text-[#1f1a24] hover:bg-[#f3e8f0]",
             )}
           >
             {link.label}

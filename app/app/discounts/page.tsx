@@ -2,6 +2,7 @@ import { Suspense } from "react";
 
 import { DiscountTable } from "@/components/catalog-tables";
 import { ListControls } from "@/components/list-controls";
+import { PageHeader } from "@/components/page-header";
 import { listDiscounts } from "@/lib/catalog";
 import { formatInr } from "@/lib/format";
 
@@ -28,7 +29,7 @@ export default async function DiscountsPage({
 
   return (
     <div className="mx-auto flex max-w-6xl flex-col gap-4">
-      <h1 className="text-2xl font-semibold">Discounts</h1>
+      <PageHeader title="Discounts" description="Seat and fixed-amount rules, with usage counted against the limit." />
       <Suspense>
         <ListControls search={query.q ?? ""} filters={[{ id: "ALL", label: "All discounts" }]} active="ALL" />
         <DiscountTable rows={rows} page={result.page} pageCount={result.pageCount} total={result.total} />

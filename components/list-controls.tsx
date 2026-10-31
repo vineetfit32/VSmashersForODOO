@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { startTransition, useEffect, useState } from "react";
 
 import { cn } from "cn";
 
@@ -27,15 +27,17 @@ export function ListControls({
   useEffect(() => {
     if (value === search) return;
     const handle = window.setTimeout(() => {
-      const next = new URLSearchParams(params.toString());
+      const next = new URLSearchParams(window.location.search);
       if (value.trim()) next.set("q", value.trim());
       else next.delete("q");
       next.delete("page");
       const query = next.toString();
-      router.replace(query ? `${pathname}?${query}` : pathname);
+      startTransition(() => {
+        router.replace(query ? `${pathname}?${query}` : pathname);
+      });
     }, 250);
     return () => window.clearTimeout(handle);
-  }, [value, search, params, pathname, router]);
+  }, [value, search, pathname, router]);
 
   function filterHref(id: string) {
     const next = new URLSearchParams(params.toString());
@@ -54,7 +56,7 @@ export function ListControls({
           value={value}
           onChange={(event) => setValue(event.target.value)}
           placeholder="Search"
-          className="h-9 w-full rounded-md border bg-white px-3 text-sm outline-none focus-visible:border-[#714B67] md:max-w-sm"
+          className="h-9 w-full rounded-md border border-[#e6e1ea] bg-white px-3 text-sm shadow-sm outline-none transition-colors focus-visible:border-[#5c3d56] md:max-w-sm"
         />
       </label>
       <div className="flex flex-wrap gap-2">
@@ -64,7 +66,8 @@ export function ListControls({
             href={filterHref(filter.id)}
             className={cn(
               "rounded-full border px-3 py-1 text-xs font-medium",
-              active === filter.id ? "border-[#714B67] bg-[#714B67] text-white" : "bg-white text-foreground",
+              "transition-colors duration-150",
+              active === filter.id ? "border-[#5c3d56] bg-[#5c3d56] text-white" : "border-[#e6e1ea] bg-white text-foreground hover:bg-[#fbf7fa]",
             )}
           >
             {filter.label}
