@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 
 import { Field, FormError } from "@/components/auth-fields";
 import { Button } from "@/components/ui/button";

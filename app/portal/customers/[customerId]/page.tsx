@@ -14,7 +14,8 @@ export default async function OwnCustomerPage({
 }) {
   const session = await getSession();
   if (!session) redirect("/login?next=/portal");
-  if (session.role !== "CUSTOMER" || !session.customerId) redirect(homeFor(session.role));
+  if (session.role !== "CUSTOMER") redirect(homeFor(session.role));
+  if (!session.customerId) redirect("/login");
 
   const { customerId } = await params;
   if (decodeURIComponent(customerId).toLowerCase() !== session.customerId.toLowerCase()) {

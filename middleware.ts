@@ -58,13 +58,8 @@ export async function middleware(request: NextRequest) {
     return denyRole(request, path, session.role);
   }
 
-  if (area === "portal") {
-    if (!session.customerId) {
-      return denyRole(request, path, session.role);
-    }
-    if (isForeignCustomerRequest(request.nextUrl, session.customerId)) {
-      return forbidden(path);
-    }
+  if (area === "portal" && (!session.customerId || isForeignCustomerRequest(request.nextUrl, session.customerId))) {
+    return forbidden(path);
   }
 
   return NextResponse.next();

@@ -12,7 +12,8 @@ export const metadata = { title: "Your account · Brightloop" };
 export default async function PortalPage() {
   const session = await getSession();
   if (!session) redirect("/login?next=/portal");
-  if (session.role !== "CUSTOMER" || !session.customerId) redirect(homeFor(session.role));
+  if (session.role !== "CUSTOMER") redirect(homeFor(session.role));
+  if (!session.customerId) redirect("/login");
 
   const customer = await prisma.customer.findFirst({
     where: { id: session.customerId, userId: session.id },

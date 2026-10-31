@@ -25,7 +25,7 @@ export default async function StaffWorkspacePage() {
       title={`${session.firstName} ${session.lastName}`}
       description="Quotations, subscriptions, invoices, and payments. Customers cannot open this workspace."
     >
-      <dl className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-4 sm:grid-cols-2">
         <div className="rounded-xl border bg-card p-4">
           <dt className="text-sm text-muted-foreground">Active subscriptions</dt>
           <dd className="mt-1 text-2xl font-semibold">{activeSubscriptions}</dd>

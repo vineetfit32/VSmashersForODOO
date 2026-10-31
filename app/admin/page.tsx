@@ -26,7 +26,7 @@ export default async function AdminPage() {
       title={`${session.firstName} ${session.lastName}`}
       description="User management, catalog, tax, and discount setup. This area is limited to administrators."
     >
-      <dl className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-3">
         <Stat label="Admins" value={counts.ADMIN ?? 0} />
         <Stat label="Staff" value={counts.STAFF ?? 0} />
         <Stat label="Customers" value={counts.CUSTOMER ?? 0} />

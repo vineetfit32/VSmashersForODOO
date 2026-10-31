@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 
 import { PASSWORD_MESSAGE } from "@/lib/auth/password-policy";
 import { Field, FormError } from "@/components/auth-fields";
