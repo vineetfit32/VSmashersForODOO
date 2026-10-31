@@ -70,6 +70,11 @@ export async function listInvoices(query: ListQuery, scope: { organizationId: st
       dueDate: { lt: today },
       status: { in: ["CONFIRMED", "OVERDUE"] },
     });
+  } else if (query.status === "OPEN") {
+    filters.push({
+      balanceDue: { gt: 0 },
+      status: { in: ["CONFIRMED", "OVERDUE"] },
+    });
   } else if (
     query.status &&
     query.status !== "ALL" &&
@@ -116,21 +121,17 @@ export async function listInvoices(query: ListQuery, scope: { organizationId: st
 export async function listPayments(query: ListQuery, organizationId: string) {
   const page = parsePage(query.page);
   const term = search(query.q);
+  const textMatch: Prisma.PaymentWhereInput | null = term
+    ? {
+        OR: [
+          { paymentNumber: { contains: term, mode: "insensitive" } },
+          { invoice: { invoiceNumber: { contains: term, mode: "insensitive" } } },
+          { invoice: { customer: { companyName: { contains: term, mode: "insensitive" } } } },
+        ],
+      }
+    : null;
   const where: Prisma.PaymentWhereInput = {
-    AND: [
-      { invoice: { customer: { organizationId } } },
-      ...(term
-        ? [
-            {
-              OR: [
-                { paymentNumber: { contains: term, mode: "insensitive" } },
-                { invoice: { invoiceNumber: { contains: term, mode: "insensitive" } } },
-                { invoice: { customer: { companyName: { contains: term, mode: "insensitive" } } } },
-              ],
-            },
-          ]
-        : []),
-    ],
+    AND: [{ invoice: { customer: { organizationId } } }, ...(textMatch ? [textMatch] : [])],
   };
 
   const [total, rows] = await Promise.all([

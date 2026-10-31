@@ -14,7 +14,7 @@ export const metadata = { title: "Your invoices · Billpilot" };
 
 const FILTERS = [
   { id: "ALL", label: "All" },
-  { id: "CONFIRMED", label: "Open" },
+  { id: "OPEN", label: "Open" },
   { id: "OVERDUE", label: "Overdue" },
   { id: "PAID", label: "Paid" },
 ];

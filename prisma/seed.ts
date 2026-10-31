@@ -691,6 +691,7 @@ async function main() {
     ].map((person) =>
       prisma.user.create({
         data: {
+          organizationId: organization.id,
           email: person.email,
           passwordHash: staffHash,
           firstName: person.firstName,
@@ -705,6 +706,7 @@ async function main() {
     CUSTOMERS.map((customer) =>
       prisma.user.create({
         data: {
+          organizationId: organization.id,
           email: customer.email,
           passwordHash: customerHash,
           firstName: customer.firstName,
@@ -719,6 +721,7 @@ async function main() {
     CUSTOMERS.map((customer, index) =>
       prisma.customer.create({
         data: {
+          organizationId: organization.id,
           userId: customerUsers[index].id,
           companyName: customer.companyName,
           contactName: customer.contactName,
@@ -741,6 +744,7 @@ async function main() {
   >) {
     const created = await prisma.product.create({
       data: {
+        organizationId: organization.id,
         name: product.name,
         type: product.type,
         salesPrice: dec(product.salesPrice),
@@ -827,6 +831,7 @@ async function main() {
   for (const plan of planInput) {
     const created = await prisma.subscriptionPlan.create({
       data: {
+        organizationId: organization.id,
         name: plan.name,
         code: plan.code,
         interval: plan.interval,
@@ -844,15 +849,16 @@ async function main() {
   }
 
   const gst = await prisma.taxRule.create({
-    data: { name: "GST 18%", ratePercent: "18.00", isCompound: false },
+    data: { organizationId: organization.id, name: "GST 18%", ratePercent: "18.00", isCompound: false },
   });
   const vat = await prisma.taxRule.create({
-    data: { name: "VAT 20%", ratePercent: "20.00", isCompound: false },
+    data: { organizationId: organization.id, name: "VAT 20%", ratePercent: "20.00", isCompound: false },
   });
   const taxByCode = { gst, vat };
 
   const seatDiscount = await prisma.discountRule.create({
     data: {
+      organizationId: organization.id,
       code: "SEAT15",
       name: "15% Seat Discount",
       type: DiscountType.PERCENTAGE,
@@ -871,6 +877,7 @@ async function main() {
 
   const flatDiscount = await prisma.discountRule.create({
     data: {
+      organizationId: organization.id,
       code: "FLAT500",
       name: "₹500 Off",
       type: DiscountType.FIXED_AMOUNT,
@@ -890,6 +897,7 @@ async function main() {
 
   await prisma.quotationTemplate.create({
     data: {
+      organizationId: organization.id,
       name: "Standard Software Quote",
       planId: monthlyPlan.id,
       validityDays: 15,

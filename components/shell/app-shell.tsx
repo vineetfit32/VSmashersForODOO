@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { LogoutButton } from "@/components/logout-button";
 import { Breadcrumbs } from "@/components/shell/breadcrumbs";
 import { SidebarNav } from "@/components/shell/sidebar-nav";
 
@@ -30,12 +31,13 @@ export function AppShell({
           <div className="flex h-12 items-center gap-3 px-4">
             <p className="text-sm font-semibold text-[#5c3d56] md:hidden">Billpilot</p>
             <Breadcrumbs />
-            <p className="ml-auto flex min-w-0 items-center gap-2 text-sm">
+            <div className="ml-auto flex min-w-0 items-center gap-2 text-sm">
               <span className="truncate text-[#1f1a24]">{user.name}</span>
               <span className="shrink-0 rounded-full bg-[#f3e8f0] px-2 py-0.5 text-xs font-medium text-[#5c3d56]">
                 {user.role}
               </span>
-            </p>
+              <LogoutButton />
+            </div>
           </div>
           <SidebarNav links={links} variant="mobile" />
         </header>

@@ -68,7 +68,7 @@ export function computeNextInterval(start: Date, interval: BillingInterval, inte
   return addUtcMonths(date, count);
 }
 
-export async function generateRecurringInvoices(input: GenerateInput = {}): Promise<BillingRunResult> {
+export async function generateRecurringInvoices(input: GenerateInput): Promise<BillingRunResult> {
   const asOf = utcDateOnly(input.asOf ?? businessToday());
   const limit = input.limit ?? 100;
   const ids = await findDueSubscriptionIds(asOf, limit, input.subscriptionIds, Boolean(input.force), input.organizationId);
