@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 export default function Home() {
   return (
     <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col justify-center gap-4 px-6">
-      <p className="text-sm font-medium text-muted-foreground">Brightloop Software</p>
+      <p className="text-sm font-medium text-muted-foreground">Billpilot Software</p>
       <h1 className="text-4xl font-semibold tracking-tight text-foreground">
         Subscription Management
       </h1>

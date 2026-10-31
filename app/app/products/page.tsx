@@ -7,7 +7,7 @@ import { listProducts } from "@/lib/catalog";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "Products · Brightloop" };
+export const metadata = { title: "Products · Billpilot" };
 
 export default async function ProductsPage({
   searchParams,

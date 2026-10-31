@@ -20,7 +20,7 @@ function escapePdf(value: string) {
 
 export function buildInvoicePdf(invoice: PdfInvoice): Uint8Array {
   const rows = [
-    "BRIGHTLOOP SOFTWARE",
+    "BILLPILOT SOFTWARE",
     `Invoice ${invoice.invoiceNumber}`,
     `Status: ${invoice.status}`,
     `Customer: ${invoice.customer}`,

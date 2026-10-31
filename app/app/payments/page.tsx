@@ -7,7 +7,7 @@ import { listPayments } from "@/lib/catalog";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "Payments · Brightloop" };
+export const metadata = { title: "Payments · Billpilot" };
 
 export default async function PaymentsPage({
   searchParams,

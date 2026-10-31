@@ -5,8 +5,8 @@ import { isUserRole, type UserRole } from "@/lib/auth/types";
 import { findAuthUserByEmail } from "@/lib/auth/users";
 
 const PERSONAS: Record<UserRole, string> = {
-  ADMIN: "admin@brightloop.com",
-  STAFF: "staff1@brightloop.com",
+  ADMIN: "admin@billpilot.com",
+  STAFF: "staff1@billpilot.com",
   CUSTOMER: "meera.iyer@northwind.example",
 };
 

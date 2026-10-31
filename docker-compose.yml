@@ -1,21 +1,21 @@
 services:
   postgres:
     image: postgres:16
-    container_name: brightloop-postgres
+    container_name: billpilot-postgres
     restart: unless-stopped
     environment:
-      POSTGRES_USER: brightloop
-      POSTGRES_PASSWORD: brightloop
-      POSTGRES_DB: brightloop
+      POSTGRES_USER: billpilot
+      POSTGRES_PASSWORD: billpilot
+      POSTGRES_DB: billpilot
     ports:
       - "5432:5432"
     volumes:
-      - brightloop_pgdata:/var/lib/postgresql/data
+      - billpilot_pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U brightloop -d brightloop"]
+      test: ["CMD-SHELL", "pg_isready -U billpilot -d billpilot"]
       interval: 5s
       timeout: 5s
       retries: 10
 
 volumes:
-  brightloop_pgdata:
+  billpilot_pgdata:

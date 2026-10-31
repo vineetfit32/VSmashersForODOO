@@ -3,7 +3,7 @@ import Link from "next/link";
 import { AuthCard } from "@/components/auth-card";
 import { ResetPasswordForm } from "@/components/reset-password-form";
 
-export const metadata = { title: "Choose a new password · Brightloop" };
+export const metadata = { title: "Choose a new password · Billpilot" };
 
 export default async function ResetPasswordPage({
   searchParams,

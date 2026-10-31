@@ -18,7 +18,7 @@ const prisma = new PrismaClient();
 const PASSWORD_REGEX =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{9,}$/;
 
-const ADMIN_EMAIL = "admin@brightloop.com";
+const ADMIN_EMAIL = "admin@billpilot.com";
 const ADMIN_PASSWORD = "Admin#Pass123";
 const STAFF_PASSWORD = "Staff#Pass123";
 const CUSTOMER_PASSWORD = "Customer#Pass123";
@@ -69,7 +69,7 @@ const CATALOG: Record<
   }
 > = {
   erp: {
-    name: "Brightloop ERP",
+    name: "Billpilot ERP",
     type: ProductType.SOFTWARE,
     salesPrice: 2400,
     costPrice: 900,
@@ -90,7 +90,7 @@ const CATALOG: Record<
     },
   },
   crm: {
-    name: "Brightloop CRM",
+    name: "Billpilot CRM",
     type: ProductType.SOFTWARE,
     salesPrice: 1800,
     costPrice: 640,
@@ -111,7 +111,7 @@ const CATALOG: Record<
     },
   },
   helpdesk: {
-    name: "Brightloop Helpdesk",
+    name: "Billpilot Helpdesk",
     type: ProductType.ADDON,
     salesPrice: 750,
     costPrice: 220,
@@ -126,7 +126,7 @@ const CATALOG: Record<
     },
   },
   inventory: {
-    name: "Brightloop Inventory",
+    name: "Billpilot Inventory",
     type: ProductType.SOFTWARE,
     salesPrice: 1200,
     costPrice: 380,
@@ -680,8 +680,8 @@ async function main() {
 
   const staff = await Promise.all(
     [
-      { email: "staff1@brightloop.com", firstName: "Priya", lastName: "Sharma" },
-      { email: "staff2@brightloop.com", firstName: "Arjun", lastName: "Mehta" },
+      { email: "staff1@billpilot.com", firstName: "Priya", lastName: "Sharma" },
+      { email: "staff2@billpilot.com", firstName: "Arjun", lastName: "Mehta" },
     ].map((person) =>
       prisma.user.create({
         data: {

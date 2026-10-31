@@ -7,7 +7,7 @@ import { listSubscriptions } from "@/lib/catalog";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "Subscriptions · Brightloop" };
+export const metadata = { title: "Subscriptions · Billpilot" };
 
 const FILTERS = [
   { id: "ALL", label: "All" },

@@ -6,7 +6,7 @@ import { LoginForm } from "@/components/login-form";
 import { homeFor } from "@/lib/auth/access";
 import { getSession } from "@/lib/auth/session";
 
-export const metadata = { title: "Sign in · Brightloop" };
+export const metadata = { title: "Sign in · Billpilot" };
 
 export default async function LoginPage({
   searchParams,
@@ -21,7 +21,7 @@ export default async function LoginPage({
   return (
     <AuthCard
       title="Sign in"
-      subtitle="Use your Brightloop account to open the workspace for your role."
+      subtitle="Use your Billpilot account to open the workspace for your role."
       footer={
         <div className="flex flex-col gap-2">
           <Link className="font-medium text-foreground underline-offset-4 hover:underline" href="/forgot-password">

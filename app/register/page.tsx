@@ -6,7 +6,7 @@ import { RegisterForm } from "@/components/register-form";
 import { homeFor } from "@/lib/auth/access";
 import { getSession } from "@/lib/auth/session";
 
-export const metadata = { title: "Create account · Brightloop" };
+export const metadata = { title: "Create account · Billpilot" };
 
 export default async function RegisterPage() {
   const session = await getSession();

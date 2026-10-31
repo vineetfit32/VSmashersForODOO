@@ -6,7 +6,7 @@ import { getFinanceSummary } from "@/services/finance";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "Finance · Brightloop" };
+export const metadata = { title: "Finance · Billpilot" };
 
 export default async function FinancePage() {
   const summary = await getFinanceSummary();

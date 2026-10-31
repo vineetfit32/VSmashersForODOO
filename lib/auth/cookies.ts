@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-export const SESSION_COOKIE = "brightloop_session";
+export const SESSION_COOKIE = "billpilot_session";
 const EIGHT_HOURS = 60 * 60 * 8;
 
 const base = {

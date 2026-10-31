@@ -5,7 +5,7 @@ const ROUNDS = 10;
 let dummyHash: Promise<string> | null = null;
 
 function dummyPasswordHash() {
-  dummyHash ??= bcrypt.hash("brightloop-dummy-password", ROUNDS);
+  dummyHash ??= bcrypt.hash("billpilot-dummy-password", ROUNDS);
   return dummyHash;
 }
 

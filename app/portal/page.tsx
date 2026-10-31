@@ -8,7 +8,7 @@ import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "Your account · Brightloop" };
+export const metadata = { title: "Your account · Billpilot" };
 
 export default async function PortalPage() {
   const session = await getSession();

@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Brightloop Subscriptions",
-  description: "Recurring billing and subscription management for Brightloop Software.",
+  title: "Billpilot Subscriptions",
+  description: "Recurring billing and subscription management for Billpilot Software.",
 };
 
 export default function RootLayout({

@@ -1,4 +1,4 @@
-# SUBSCRIPTION MANAGEMENT SYSTEM (BRIGHTLOOP)
+# SUBSCRIPTION MANAGEMENT SYSTEM (BILLPILOT)
 ## Production-Grade PRD, System Architecture & Cursor / Grok 4.7 Execution Blueprint
 **Target Platform:** Fullstack Recurring Billing & Subscription SaaS (Odoo Style)  
 **Hackathon:** Odoo x FLUX Lucknow Hackathon '26 (Virtual Round)  
@@ -8,8 +8,8 @@
 
 ## 1. Executive Summary & Problem Context
 
-### 1.1 The Business Challenge (Brightloop Software)
-Brightloop Software sells recurring business software, modular add-ons, and multi-variant products billed across various billing frequencies (monthly, yearly, weekly, daily). Today, the business is handicapped by manual spreadsheets, missed renewals, manual invoice drafting, manual bank statement reconciliation, and untracked recurring revenue (MRR/ARR).
+### 1.1 The Business Challenge (Billpilot Software)
+Billpilot Software sells recurring business software, modular add-ons, and multi-variant products billed across various billing frequencies (monthly, yearly, weekly, daily). Today, the business is handicapped by manual spreadsheets, missed renewals, manual invoice drafting, manual bank statement reconciliation, and untracked recurring revenue (MRR/ARR).
 
 ### 1.2 Target System Goal
 Build a unified, robust, high-performance web platform that automates the complete subscription lifecycle:
@@ -577,14 +577,14 @@ To feed this into Cursor using Grok 4.7, follow this phased execution blueprint:
 
 ### Phase 1: Project Scaffolding & Database Setup
 ```text
-@cursor You are a Principal Fullstack Engineer building the Brightloop Subscription Management System for the Odoo Hackathon.
+@cursor You are a Principal Fullstack Engineer building the Billpilot Subscription Management System for the Odoo Hackathon.
 Strictly adhere to the PRD in SUBSCRIPTION_MANAGEMENT_PRD_CURSOR_BLUEPRINT.md.
 Step 1:
 1. Initialize a Next.js 15 project with TypeScript, Tailwind CSS, and Shadcn UI.
 2. Setup Prisma ORM connected to PostgreSQL. Create the schema matching Section 4 of the PRD with all tables, enums, relations, and indexes.
 3. Generate a seed script (prisma/seed.ts) that populates:
-   - 1 Admin user (admin@brightloop.com / Admin#Pass123)
-   - 2 Staff users (staff1@brightloop.com, staff2@brightloop.com)
+   - 1 Admin user (admin@billpilot.com / Admin#Pass123)
+   - 2 Staff users (staff1@billpilot.com, staff2@billpilot.com)
    - 5 Customers with full billing details
    - Products with variants (including 'Odoo Brand' variant adding +560.00)
    - Plans (Daily, Weekly, Monthly, Yearly) with auto_close and pause flags

@@ -2,7 +2,7 @@
 
 A platform to manage products, plans, subscriptions, invoices, payments, and revenue for subscription-based businesses.
 
-Built for the **Odoo Hackathon**. Brightloop Software sells software on subscription. This system replaces the spreadsheets, hand-typed invoices, and quarterly revenue reports with one billing workspace.
+Built for the **Odoo Hackathon**. Billpilot Software sells software on subscription. This system replaces the spreadsheets, hand-typed invoices, and quarterly revenue reports with one billing workspace.
 
 ## Stack
 
@@ -36,9 +36,9 @@ The seed loads an admin, two staff users, five customers, the product catalog (i
 
 | Role | Email | Password |
 |---|---|---|
-| Admin | admin@brightloop.com | Admin#Pass123 |
-| Staff | staff1@brightloop.com | Staff#Pass123 |
-| Staff | staff2@brightloop.com | Staff#Pass123 |
+| Admin | admin@billpilot.com | Admin#Pass123 |
+| Staff | staff1@billpilot.com | Staff#Pass123 |
+| Staff | staff2@billpilot.com | Staff#Pass123 |
 | Customer | the five seeded company emails | Customer#Pass123 |
 
 4. Start the app:

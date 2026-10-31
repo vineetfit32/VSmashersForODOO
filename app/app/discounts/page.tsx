@@ -8,7 +8,7 @@ import { formatInr } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "Discounts · Brightloop" };
+export const metadata = { title: "Discounts · Billpilot" };
 
 export default async function DiscountsPage({
   searchParams,

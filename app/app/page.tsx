@@ -6,7 +6,7 @@ import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "Workspace · Brightloop" };
+export const metadata = { title: "Workspace · Billpilot" };
 
 export default async function WorkspaceHome() {
   const session = await getSession();
