@@ -20,7 +20,10 @@ export async function listSubscriptions(query: ListQuery, customerId?: string) {
   const term = search(query.q);
   const where: Prisma.SubscriptionWhereInput = {};
   if (customerId) where.customerId = customerId;
-  if (query.status && query.status !== "ALL") where.status = query.status as Prisma.EnumSubscriptionStatusFilter["equals"];
+  const subscriptionStatuses = ["DRAFT", "QUOTATION", "CONFIRMED", "ACTIVE", "PAUSED", "CLOSED"] as const;
+  if (query.status && query.status !== "ALL" && subscriptionStatuses.includes(query.status as (typeof subscriptionStatuses)[number])) {
+    where.status = query.status as (typeof subscriptionStatuses)[number];
+  }
   if (term) {
     where.OR = [
       { subscriptionNumber: { contains: term, mode: "insensitive" } },
@@ -58,14 +61,19 @@ export async function listInvoices(query: ListQuery, customerId?: string) {
   const filters: Prisma.InvoiceWhereInput[] = [];
   if (customerId) filters.push({ customerId });
 
+  const invoiceStatuses = ["DRAFT", "CONFIRMED", "PAID", "CANCELLED", "OVERDUE"] as const;
   if (query.status === "OVERDUE") {
     filters.push({
       balanceDue: { gt: 0 },
       dueDate: { lt: today },
       status: { in: ["CONFIRMED", "OVERDUE"] },
     });
-  } else if (query.status && query.status !== "ALL") {
-    filters.push({ status: query.status as Prisma.EnumInvoiceStatusFilter["equals"] });
+  } else if (
+    query.status &&
+    query.status !== "ALL" &&
+    invoiceStatuses.includes(query.status as (typeof invoiceStatuses)[number])
+  ) {
+    filters.push({ status: query.status as (typeof invoiceStatuses)[number] });
   }
 
   if (term) {
