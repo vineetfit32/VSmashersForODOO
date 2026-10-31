@@ -19,7 +19,10 @@ export function SidebarNav({ links, variant }: { links: ShellLink[]; variant: "s
       }
     >
       {links.map((link) => {
-        const active = pathname === link.href || pathname.startsWith(`${link.href}/`);
+        const active =
+          link.href === "/app" || link.href === "/portal"
+            ? pathname === link.href
+            : pathname === link.href || pathname.startsWith(`${link.href}/`);
         return (
           <Link
             key={link.href}
