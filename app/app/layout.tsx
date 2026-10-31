@@ -7,7 +7,7 @@ import { getSession } from "@/lib/auth/session";
 export const dynamic = "force-dynamic";
 
 const LINKS = [
-  { href: "/app", label: "Overview" },
+  { href: "/app", label: "Dashboard" },
   { href: "/app/subscriptions", label: "Subscriptions" },
   { href: "/app/invoices", label: "Invoices" },
   { href: "/app/payments", label: "Payments" },
@@ -21,10 +21,8 @@ export default async function WorkspaceLayout({ children }: { children: React.Re
   if (!session) redirect("/login?next=/app");
   if (session.role !== "ADMIN" && session.role !== "STAFF") redirect(homeFor(session.role));
 
-  const links = session.role === "ADMIN" ? [...LINKS, { href: "/admin", label: "Control panel" }] : LINKS;
-
   return (
-    <AppShell links={links} user={{ name: `${session.firstName} ${session.lastName}`, role: session.role }}>
+    <AppShell links={LINKS} user={{ name: `${session.firstName} ${session.lastName}`, role: session.role }}>
       {children}
     </AppShell>
   );

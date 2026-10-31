@@ -35,8 +35,7 @@ export function roleAllowed(area: ProtectedArea, role: UserRole) {
 }
 
 export function homeFor(role: UserRole) {
-  if (role === "ADMIN") return "/admin";
-  if (role === "STAFF") return "/app";
+  if (role === "ADMIN" || role === "STAFF") return "/app";
   return "/portal";
 }
 
