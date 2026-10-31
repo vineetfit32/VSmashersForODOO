@@ -35,6 +35,8 @@ type GenerateInput = {
   limit?: number;
   actorId?: string | null;
   subscriptionIds?: string[];
+  /** Invoice the next period even when next_billing_date is still in the future. */
+  force?: boolean;
 };
 
 type LoadedSubscription = Prisma.SubscriptionGetPayload<{
@@ -68,7 +70,7 @@ export function computeNextInterval(start: Date, interval: BillingInterval, inte
 export async function generateRecurringInvoices(input: GenerateInput = {}): Promise<BillingRunResult> {
   const asOf = utcDateOnly(input.asOf ?? businessToday());
   const limit = input.limit ?? 100;
-  const ids = await findDueSubscriptionIds(asOf, limit, input.subscriptionIds);
+  const ids = await findDueSubscriptionIds(asOf, limit, input.subscriptionIds, Boolean(input.force));
   const result: BillingRunResult = {
     scanned: ids.length,
     created: [],
@@ -77,7 +79,7 @@ export async function generateRecurringInvoices(input: GenerateInput = {}): Prom
   };
 
   for (const subscriptionId of ids) {
-    const outcome = await billOne(subscriptionId, asOf, input.actorId ?? null);
+    const outcome = await billOne(subscriptionId, asOf, input.actorId ?? null, Boolean(input.force));
     if (outcome.created) result.created.push(outcome.created);
     if (outcome.skipped) result.skipped.push(outcome.skipped);
     if (outcome.closedSubscriptionId) result.closedSubscriptionIds.push(outcome.closedSubscriptionId);
@@ -86,7 +88,7 @@ export async function generateRecurringInvoices(input: GenerateInput = {}): Prom
   return result;
 }
 
-async function findDueSubscriptionIds(asOf: Date, limit: number, only?: string[]) {
+async function findDueSubscriptionIds(asOf: Date, limit: number, only?: string[], force = false) {
   const asOfIso = isoDate(asOf);
   if (only && only.length === 0) return [];
 
@@ -94,12 +96,15 @@ async function findDueSubscriptionIds(asOf: Date, limit: number, only?: string[]
     only && only.length > 0
       ? Prisma.sql`AND id IN (${Prisma.join(only.map((id) => Prisma.sql`CAST(${id} AS uuid)`))})`
       : Prisma.empty;
+  const dueFilter = force
+    ? Prisma.sql`AND next_billing_date IS NOT NULL`
+    : Prisma.sql`AND next_billing_date <= CAST(${asOfIso} AS date)`;
 
   const rows = await prisma.$queryRaw<Array<{ id: string }>>`
     SELECT id
     FROM subscriptions
     WHERE status = 'ACTIVE'
-      AND next_billing_date <= CAST(${asOfIso} AS date)
+      ${dueFilter}
       AND (expiry_date IS NULL OR expiry_date >= CAST(${asOfIso} AS date))
       ${idFilter}
     ORDER BY next_billing_date ASC
@@ -114,10 +119,15 @@ type BillOutcome = {
   closedSubscriptionId?: string;
 };
 
-async function billOne(subscriptionId: string, asOf: Date, actorId: string | null): Promise<BillOutcome> {
+async function billOne(
+  subscriptionId: string,
+  asOf: Date,
+  actorId: string | null,
+  force: boolean,
+): Promise<BillOutcome> {
   for (let attempt = 0; attempt < 3; attempt += 1) {
     try {
-      return await prisma.$transaction((tx) => billLocked(tx, subscriptionId, asOf, actorId), {
+      return await prisma.$transaction((tx) => billLocked(tx, subscriptionId, asOf, actorId, force), {
         maxWait: 5_000,
         timeout: 20_000,
       });
@@ -137,14 +147,18 @@ async function billLocked(
   subscriptionId: string,
   asOf: Date,
   actorId: string | null,
+  force: boolean,
 ): Promise<BillOutcome> {
   const asOfIso = isoDate(asOf);
+  const dueFilter = force
+    ? Prisma.sql`AND next_billing_date IS NOT NULL`
+    : Prisma.sql`AND next_billing_date <= CAST(${asOfIso} AS date)`;
   const locked = await tx.$queryRaw<Array<{ id: string }>>`
     SELECT id
     FROM subscriptions
     WHERE id = CAST(${subscriptionId} AS uuid)
       AND status = 'ACTIVE'
-      AND next_billing_date <= CAST(${asOfIso} AS date)
+      ${dueFilter}
       AND (expiry_date IS NULL OR expiry_date >= CAST(${asOfIso} AS date))
     FOR UPDATE SKIP LOCKED
   `;

@@ -110,6 +110,44 @@ function parseAmount(amount: number) {
   return amountCents;
 }
 
+export async function confirmInvoice(invoiceId: string, actorId?: string | null) {
+  return prisma.$transaction(async (tx) => {
+    const locked = await tx.$queryRaw<Array<{ id: string }>>`
+      SELECT id FROM invoices WHERE id = CAST(${invoiceId} AS uuid) FOR UPDATE
+    `;
+    if (locked.length === 0) throw new DomainError("Invoice not found.", 404);
+
+    const invoice = await tx.invoice.findUnique({ where: { id: invoiceId } });
+    if (!invoice) throw new DomainError("Invoice not found.", 404);
+    if (invoice.status !== InvoiceStatus.DRAFT) {
+      throw new DomainError("Only a draft invoice can be confirmed.");
+    }
+
+    const balance = cents(Number(invoice.grandTotal)) - cents(Number(invoice.amountPaid));
+    const updated = await tx.invoice.update({
+      where: { id: invoice.id },
+      data: {
+        status: InvoiceStatus.CONFIRMED,
+        balanceDue: moneyString(fromCents(Math.max(0, balance))),
+      },
+    });
+
+    await tx.auditLog.create({
+      data: {
+        entityName: "invoice",
+        entityId: invoice.id,
+        actorId: actorId ?? null,
+        action: "STATUS_CHANGE",
+        message: `${invoice.invoiceNumber} confirmed.`,
+        metadata: { from: "DRAFT", to: "CONFIRMED" },
+      },
+    });
+
+    return { id: updated.id, invoiceNumber: updated.invoiceNumber, status: updated.status };
+  });
+}
+
 export const PaymentService = {
   recordPayment,
+  confirmInvoice,
 };
