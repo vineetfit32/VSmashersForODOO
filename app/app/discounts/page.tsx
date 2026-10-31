@@ -16,8 +16,10 @@ export default async function DiscountsPage({
 }: {
   searchParams: Promise<{ q?: string; page?: string }>;
 }) {
+  const session = await getSession();
+  if (!session) return null;
   const query = await searchParams;
-  const result = await listDiscounts(query);
+  const result = await listDiscounts(query, session.organizationId);
   const rows = result.rows.map((row) => ({
     id: row.id,
     code: row.code,

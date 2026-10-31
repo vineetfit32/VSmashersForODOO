@@ -15,8 +15,10 @@ export default async function PaymentsPage({
 }: {
   searchParams: Promise<{ q?: string; page?: string }>;
 }) {
+  const session = await getSession();
+  if (!session) return null;
   const query = await searchParams;
-  const result = await listPayments(query);
+  const result = await listPayments(query, session.organizationId);
   const rows = result.rows.map((row) => ({
     id: row.id,
     paymentNumber: row.paymentNumber,

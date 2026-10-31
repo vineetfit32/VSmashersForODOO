@@ -7,14 +7,17 @@ import { InvoiceActions } from "@/components/invoice-actions";
 import { StatusPipeline, invoiceStages } from "@/components/status-pipeline";
 import { loadChatter } from "@/lib/chatter";
 import { formatDate, formatInr, titleStatus } from "@/lib/format";
+import { getSession } from "@/lib/auth/session";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
 export default async function InvoiceFormPage({ params }: { params: Promise<{ id: string }> }) {
+  const session = await getSession();
+  if (!session) return null;
   const { id } = await params;
-  const invoice = await prisma.invoice.findUnique({
-    where: { id },
+  const invoice = await prisma.invoice.findFirst({
+    where: { id, customer: { organizationId: session.organizationId } },
     include: {
       customer: true,
       subscription: true,

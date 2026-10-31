@@ -24,8 +24,10 @@ export default async function InvoicesPage({
 }: {
   searchParams: Promise<{ q?: string; status?: string; page?: string }>;
 }) {
+  const session = await getSession();
+  if (!session) return null;
   const query = await searchParams;
-  const result = await listInvoices(query);
+  const result = await listInvoices(query, { organizationId: session.organizationId });
   const rows = result.rows.map((row) => ({
     id: row.id,
     invoiceNumber: row.invoiceNumber,

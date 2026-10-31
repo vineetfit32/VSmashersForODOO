@@ -14,8 +14,8 @@ export default async function RegisterPage() {
 
   return (
     <AuthCard
-      title="Create your account"
-      subtitle="Customer registration. Each email belongs to one account."
+      title="Open a workspace"
+      subtitle="This creates your company and an admin login. Customers and staff are added inside the workspace."
       footer={
         <p>
           Already registered?{" "}

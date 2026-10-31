@@ -10,6 +10,7 @@ export const metadata = { title: "Workspace · Billpilot" };
 
 export default async function WorkspaceHome() {
   const session = await getSession();
+  if (!session) return null;
   const [activeSubscriptions, overdueInvoices, openQuotes] = await Promise.all([
     prisma.subscription.count({ where: { status: "ACTIVE", customer: { organizationId: session.organizationId } } }),
     prisma.invoice.count({ where: { status: "OVERDUE", customer: { organizationId: session.organizationId } } }),

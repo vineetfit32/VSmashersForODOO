@@ -647,6 +647,7 @@ async function clearDatabase() {
   await prisma.subscriptionPlan.deleteMany();
   await prisma.customer.deleteMany();
   await prisma.user.deleteMany();
+  await prisma.organization.deleteMany();
 }
 
 async function main() {
@@ -668,8 +669,13 @@ async function main() {
 
   await clearDatabase();
 
+  const organization = await prisma.organization.create({
+    data: { name: "Billpilot Demo", slug: "billpilot-demo" },
+  });
+
   const admin = await prisma.user.create({
     data: {
+      organizationId: organization.id,
       email: ADMIN_EMAIL,
       passwordHash: adminHash,
       firstName: "Asha",

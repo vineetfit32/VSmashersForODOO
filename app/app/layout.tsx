@@ -8,10 +8,12 @@ export const dynamic = "force-dynamic";
 
 const LINKS = [
   { href: "/app", label: "Dashboard" },
+  { href: "/app/customers", label: "Customers" },
   { href: "/app/subscriptions", label: "Subscriptions" },
   { href: "/app/invoices", label: "Invoices" },
   { href: "/app/payments", label: "Payments" },
   { href: "/app/products", label: "Products" },
+  { href: "/app/plans", label: "Plans" },
   { href: "/app/discounts", label: "Discounts" },
   { href: "/app/finance", label: "Finance" },
 ];

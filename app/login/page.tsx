@@ -21,7 +21,7 @@ export default async function LoginPage({
   return (
     <AuthCard
       title="Sign in"
-      subtitle="Use your Billpilot account to open the workspace for your role."
+      subtitle="Admins and staff open their company workspace. Customers open only their own portal."
       footer={
         <div className="flex flex-col gap-2">
           <Link className="font-medium text-foreground underline-offset-4 hover:underline" href="/forgot-password">

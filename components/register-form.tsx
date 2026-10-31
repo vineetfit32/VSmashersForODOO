@@ -57,7 +57,7 @@ export function RegisterForm() {
       </div>
       <FormError message={error} />
       <Button type="submit" disabled={pending}>
-        {pending ? "Creating account…" : "Create account"}
+        {pending ? "Creating workspace…" : "Create workspace"}
       </Button>
     </form>
   );

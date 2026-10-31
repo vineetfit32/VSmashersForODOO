@@ -10,7 +10,9 @@ export const dynamic = "force-dynamic";
 export const metadata = { title: "Finance · Billpilot" };
 
 export default async function FinancePage() {
-  const summary = await getFinanceSummary();
+  const session = await getSession();
+  if (!session) return null;
+  const summary = await getFinanceSummary(session.organizationId);
 
   return (
     <div className="mx-auto flex max-w-6xl flex-col gap-5">

@@ -7,14 +7,17 @@ import { StatusPipeline, subscriptionStages } from "@/components/status-pipeline
 import { SubscriptionActions } from "@/components/subscription-actions";
 import { loadChatter } from "@/lib/chatter";
 import { formatDate, formatInr } from "@/lib/format";
+import { getSession } from "@/lib/auth/session";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
 export default async function SubscriptionFormPage({ params }: { params: Promise<{ id: string }> }) {
+  const session = await getSession();
+  if (!session) return null;
   const { id } = await params;
-  const subscription = await prisma.subscription.findUnique({
-    where: { id },
+  const subscription = await prisma.subscription.findFirst({
+    where: { id, customer: { organizationId: session.organizationId } },
     include: {
       customer: true,
       plan: true,

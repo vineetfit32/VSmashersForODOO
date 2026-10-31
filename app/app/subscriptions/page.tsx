@@ -2,6 +2,8 @@ import { Suspense } from "react";
 
 import { ListControls } from "@/components/list-controls";
 import { PageHeader } from "@/components/page-header";
+import { CreateSubscriptionForm } from "@/components/setup-forms";
+import { prisma } from "@/lib/prisma";
 import { SubscriptionTable } from "@/components/record-tables";
 import { listSubscriptions } from "@/lib/catalog";
 import { getSession } from "@/lib/auth/session";
@@ -25,8 +27,27 @@ export default async function SubscriptionsPage({
 }: {
   searchParams: Promise<{ q?: string; status?: string; page?: string }>;
 }) {
+  const session = await getSession();
+  if (!session) return null;
   const query = await searchParams;
-  const result = await listSubscriptions(query);
+  const [result, customers, plans, products] = await Promise.all([
+    listSubscriptions(query, { organizationId: session.organizationId }),
+    prisma.customer.findMany({
+      where: { organizationId: session.organizationId },
+      orderBy: { companyName: "asc" },
+      select: { id: true, companyName: true },
+    }),
+    prisma.subscriptionPlan.findMany({
+      where: { organizationId: session.organizationId, isActive: true },
+      orderBy: { name: "asc" },
+      select: { id: true, name: true },
+    }),
+    prisma.product.findMany({
+      where: { organizationId: session.organizationId, isActive: true },
+      orderBy: { name: "asc" },
+      select: { id: true, name: true },
+    }),
+  ]);
   const rows = result.rows.map((row) => ({
     id: row.id,
     subscriptionNumber: row.subscriptionNumber,
@@ -39,7 +60,8 @@ export default async function SubscriptionsPage({
 
   return (
     <div className="mx-auto flex max-w-6xl flex-col gap-4">
-      <PageHeader title="Subscriptions" description="Search by number, customer, or plan. Filters use the saved status." />
+      <PageHeader title="Subscriptions" description="Drafts stay in your workspace until you send a quotation." />
+      <CreateSubscriptionForm customers={customers} plans={plans} products={products} />
       <Suspense>
         <ListControls search={query.q ?? ""} filters={FILTERS} active={query.status ?? "ALL"} />
         <SubscriptionTable rows={rows} page={result.page} pageCount={result.pageCount} total={result.total} />
