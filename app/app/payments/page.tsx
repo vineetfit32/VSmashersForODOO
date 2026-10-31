@@ -4,6 +4,7 @@ import { ListControls } from "@/components/list-controls";
 import { PageHeader } from "@/components/page-header";
 import { PaymentTable } from "@/components/record-tables";
 import { listPayments } from "@/lib/catalog";
+import { getSession } from "@/lib/auth/session";
 
 export const dynamic = "force-dynamic";
 

@@ -4,6 +4,7 @@ import { DiscountTable } from "@/components/catalog-tables";
 import { ListControls } from "@/components/list-controls";
 import { PageHeader } from "@/components/page-header";
 import { listDiscounts } from "@/lib/catalog";
+import { getSession } from "@/lib/auth/session";
 import { formatInr } from "@/lib/format";
 
 export const dynamic = "force-dynamic";

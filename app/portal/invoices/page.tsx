@@ -27,7 +27,10 @@ export default async function PortalInvoicesPage({
   const session = await getSession();
   if (!session?.customerId) redirect(homeFor(session?.role ?? "CUSTOMER"));
   const query = await searchParams;
-  const result = await listInvoices(query, session.customerId);
+  const result = await listInvoices(query, {
+    organizationId: session.organizationId,
+    customerId: session.customerId,
+  });
   const rows = result.rows.map((row) => ({
     id: row.id,
     invoiceNumber: row.invoiceNumber,
